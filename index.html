@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Audio Extract</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- LameJS库用于MP3编码 -->
+    <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.0/lame.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Audio Extract</h1>
+            <p>视频转音频</p>
+        </div>
+
+        <!-- Safari模式提示 -->
+        <div class="mode-badge" id="safariBadge" style="display: none;">Safari模式已激活</div>
+        <div class="mode-badge" id="recordingBadge" style="display: none; background: #fff3e0; color: #f57c00;">强制录制模式 (Safari MOV)</div>
+
+        <div class="card">
+            <div class="file-input-wrapper" id="fileWrapper">
+                <div class="file-icon-container">
+                    <svg class="file-icon file-icon-default" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                    <svg class="file-icon file-icon-success" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="currentColor"></circle>
+                        <path d="M8 12l3 3 5-5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+                <span id="fileText">点击选择视频文件</span>
+                <input type="file" id="fileInput" accept="video/*">
+            </div>
+
+            <div class="filename" id="filename"></div>
+
+            <div class="status-message" id="statusMessage"></div>
+
+            <div class="toggle-container">
+                <span class="toggle-label">提取为MP3格式</span>
+                <div class="toggle" id="formatToggle">
+                    <div class="toggle-thumb"></div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="extractBtn" disabled>
+                <div class="spinner"></div>
+                <span>提取MP3</span>
+            </button>
+
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">
+                    <span id="progressDescription">准备中...</span>
+                    <span class="progress-percentage" id="progressPercentage">0%</span>
+                </div>
+            </div>
+
+            <div class="result-container" id="resultContainer">
+                <div class="audio-player">
+                    <audio id="audioPlayer" controls></audio>
+                </div>
+                <a href="#" class="download-btn" id="downloadBtn" download="extracted-audio.mp3">下载MP3</a>
+            </div>
+
+            <p class="info-text">处理时长与视频大小成正比，请耐心等待</p>
+        </div>
+
+        <button class="btn btn-secondary" id="resetBtn" style="display: none;">重置</button>
+    </div>
+
+    <video id="hiddenVideo" playsinline style="display: none;"></video>
+    <audio id="hiddenAudio" style="display: none;"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
