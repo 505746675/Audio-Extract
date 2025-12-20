@@ -25,8 +25,7 @@
 
 ## 🚀 快速开始
 
-1. 由于项目仅包含HTML、CSS和JavaScript文件，无需编译：
-# 直接打开index.html
+1. 由于项目仅包含HTML、CSS和JavaScript文件，无需编译，直接打开index.html
 
 ## 📂 项目结构
 
