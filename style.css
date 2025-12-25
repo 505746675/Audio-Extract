@@ -15,34 +15,37 @@
     --text-secondary: #8e8e93;
     --border-radius: 16px;
     --blur: 20px;
+    --border-color: #d1d1d6;
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-primary);
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     background: linear-gradient(135deg, #e0eaff 0%, #f5f7fa 100%);
+    overflow-x: hidden;
 }
 
 .container {
     width: 100%;
     max-width: 500px;
-    height: 100%;
+    min-height: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 10px;
+    padding: 20px 0;
 }
 
 .header {
     text-align: center;
     margin-bottom: 10px;
+    position: relative;
 }
 
 .header h1 {
@@ -57,6 +60,7 @@ body {
     color: var(--text-secondary);
     font-size: 15px;
 }
+
 
 .mode-badge {
     background: #e8f5e9;
@@ -82,6 +86,12 @@ body {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
 }
 
 .file-input-wrapper {
@@ -91,13 +101,18 @@ body {
     border-radius: 12px;
     overflow: hidden;
     background: rgba(255, 255, 255, 0.6);
-    border: 2px dashed #d1d1d6;
+    border: 2px dashed var(--border-color);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
+}
+
+.file-input-wrapper:hover {
+    border-color: var(--primary);
+    background: rgba(0, 122, 255, 0.05);
 }
 
 .file-input-wrapper.active {
@@ -202,6 +217,79 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* 格式选择器样式 */
+.format-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.format-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.format-select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+}
+
+/* 质量选择器样式 */
+.quality-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quality-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.quality-select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+}
+
+.quality-select:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
 .btn {
     width: 100%;
     padding: 16px;
@@ -217,6 +305,11 @@ body {
     gap: 8px;
     position: relative;
     overflow: hidden;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .btn:active {
@@ -346,6 +439,11 @@ body {
     display: inline-block;
 }
 
+.download-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(52, 199, 89, 0.3);
+}
+
 .download-btn:active {
     transform: scale(0.98);
     opacity: 0.8;
@@ -392,51 +490,6 @@ body {
     color: #ff9500;
 }
 
-.toggle-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    margin-top: 8px;
-    display: none;
-}
-
-.toggle-label {
-    font-size: 14px;
-    color: var(--text-primary);
-}
-
-.toggle {
-    position: relative;
-    width: 50px;
-    height: 30px;
-    background: #e5e5ea;
-    border-radius: 15px;
-    transition: background 0.3s ease;
-    cursor: pointer;
-}
-
-.toggle.active {
-    background: var(--success);
-}
-
-.toggle-thumb {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 24px;
-    height: 24px;
-    background: white;
-    border-radius: 50%;
-    transition: transform 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.toggle.active .toggle-thumb {
-    transform: translateX(20px);
-}
-
 #hiddenVideo, #hiddenAudio {
     display: none;
 }
@@ -447,6 +500,236 @@ body {
     to { opacity: 0; }
 }
 
+/* PC端和大屏幕适配 */
+@media (min-width: 768px) {
+    body {
+        padding: 40px 20px;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+
+    .container {
+        max-width: 600px;
+        gap: 15px;
+        padding: 20px 0;
+    }
+
+    .header h1 {
+        font-size: 32px;
+    }
+
+    .header p {
+        font-size: 16px;
+    }
+
+    .card {
+        padding: 30px;
+        gap: 20px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .file-input-wrapper {
+        height: 160px;
+        border-width: 3px;
+        transition: all 0.3s ease;
+    }
+
+    .file-input-wrapper:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 122, 255, 0.15);
+    }
+
+    .file-icon-container {
+        width: 60px;
+        height: 60px;
+    }
+
+    .file-input-wrapper span {
+        font-size: 16px;
+    }
+
+    .btn {
+        padding: 18px;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .format-select,
+    .quality-select {
+        padding: 14px;
+        font-size: 16px;
+    }
+
+    .format-label,
+    .quality-label {
+        font-size: 14px;
+    }
+
+    .filename {
+        font-size: 16px;
+        padding: 10px 14px;
+        background: rgba(0, 0, 0, 0.04);
+    }
+
+    .info-text {
+        font-size: 13px;
+    }
+
+    .audio-player {
+        padding: 16px;
+    }
+
+    .audio-player audio {
+        height: 36px;
+    }
+
+    .download-btn {
+        padding: 14px;
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 1024px) {
+    body {
+        padding: 60px 20px;
+    }
+
+    .container {
+        max-width: 750px;
+    }
+
+    .header h1 {
+        font-size: 40px;
+        letter-spacing: -1px;
+    }
+
+    .header p {
+        font-size: 18px;
+    }
+
+    .card {
+        padding: 45px;
+        gap: 28px;
+        border-radius: 20px;
+    }
+
+    .file-input-wrapper {
+        height: 200px;
+        border-width: 4px;
+    }
+
+    .file-icon-container {
+        width: 80px;
+        height: 80px;
+    }
+
+    .file-input-wrapper span {
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .btn {
+        padding: 22px;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .format-select,
+    .quality-select {
+        padding: 16px;
+        font-size: 18px;
+        border-width: 2px;
+    }
+
+    .format-label,
+    .quality-label {
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .filename {
+        font-size: 18px;
+        padding: 12px 16px;
+    }
+
+    .audio-player {
+        padding: 20px;
+        gap: 16px;
+    }
+
+    .audio-player audio {
+        height: 44px;
+    }
+
+    .download-btn {
+        padding: 16px;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .info-text {
+        font-size: 14px;
+    }
+
+    .progress-text {
+        font-size: 15px;
+    }
+
+    .progress-percentage {
+        font-size: 16px;
+    }
+
+    .status-message {
+        font-size: 15px;
+        padding: 10px;
+    }
+}
+
+/* 滚动条样式优化（PC端） */
+@media (min-width: 768px) {
+    body::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    body::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+    }
+
+    body::-webkit-scrollbar-thumb {
+        background: rgba(0, 122, 255, 0.3);
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+    body::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 122, 255, 0.5);
+    }
+}
+
+/* 高分辨率屏幕优化 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .card {
+        border-width: 0.5px;
+    }
+
+    .file-input-wrapper {
+        border-width: 1.5px;
+    }
+}
+
+
+/* 移动端优化 */
 @media (max-width: 380px) {
     .header h1 {
         font-size: 24px;
@@ -456,5 +739,14 @@ body {
     }
     .btn {
         padding: 14px;
+    }
+    .format-options,
+    .quality-options {
+        gap: 6px;
+    }
+    .format-btn,
+    .quality-btn {
+        padding: 8px 4px;
+        font-size: 12px;
     }
 }

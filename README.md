@@ -1,8 +1,8 @@
 # Audio Extract - 视频转音频工具
 
-![Audio Extract](https://img.shields.io/badge/Version-1.0.0-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![Browser](https://img.shields.io/badge/Browser-Compatible-brightgreen)
+![Audio Extract](https://img.shields.io/badge/Version-2.0.0-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![Browser](https://img.shields.io/badge/Browser-Compatible-brightgreen)
 
-一个现代化的在线视频转音频工具，支持从视频文件中直接提取音频并转换为MP3格式。
+一个现代化的在线视频转音频工具，支持从视频文件中直接提取音频并转换为多种格式（MP3、WAV、AAC），支持多档音频质量选择。
 
 ## ✨ 主要特性
 
@@ -12,15 +12,24 @@
 - **实时预览** - 文件上传后立即显示信息
 
 ### 🎵 音频提取
-- **高质量提取** - 保持原始音频质量
+- **多格式支持** - MP3、WAV格式输出
+- **质量选择** - MP3支持高/中/低三档比特率可选
 - **智能编码** - 自动选择最佳提取方式
-- **MP3编码** - 使用lame.js进行高效MP3编码
 - **实时进度** - 显示详细的处理进度
+
+### 🛠️ 音频质量选项
+- **高品质 (192kbps)** - 最佳音质，适合音乐制作（仅MP3）
+- **中品质 (128kbps)** - 平衡音质和文件大小（默认，仅MP3）
+- **低品质 (64kbps)** - 小文件，适合语音和播客（仅MP3）
+- **无损WAV** - 保持原始音频质量，无压缩
+
 
 ### 🌐 浏览器优化
 - **跨浏览器兼容** - Chrome、Firefox、Safari、Edge等
 - **Safari特殊处理** - 针对Safari浏览器的MOV文件优化
-- **移动端适配** - 完美适配手机和平板设备
+- **响应式设计** - 完美适配PC、平板和手机设备
+- **PC端优化** - 大屏幕布局优化、滚动支持、悬停效果
+- **移动端适配** - 触摸优化、文件大小限制、性能优化
 - **离线处理** - 所有处理在浏览器本地完成
 
 ## 🚀 快速开始
@@ -49,7 +58,7 @@ audio-extract/
 - **File API** - 文件读取
 - **Drag & Drop API** - 拖放功能
 - **Blob API** - 文件下载
-- **Canvas API** - 音频可视化（预留）
+- **OfflineAudioContext** - 离线音频处理（AAC编码）
 
 ## 🎯 使用指南
 
@@ -58,23 +67,35 @@ audio-extract/
 - **拖放上传**：直接将视频文件拖到上传区域
 - **文件限制**：建议视频文件不超过500MB
 
-### 2. 提取音频
-- **一键提取**：点击"提取MP3"按钮
+### 2. 选择输出格式
+点击格式选择器选择输出格式：
+- **MP3** - 兼容性最好的格式，使用lame.js编码，支持质量选择
+- **WAV** - 无损格式，保持原始音频质量，不支持质量选择
+
+### 3. 选择音频质量（仅MP3）
+- 如果选择MP3格式，可以点击质量选择器选择比特率：
+  - **低** - 64kbps，文件最小，适合语音
+  - **中** - 128kbps，默认，平衡选择
+  - **高** - 192kbps，音质最好，适合音乐
+- 如果选择WAV格式，质量选择器将被禁用（WAV为无损格式，文件大小固定）
+
+### 4. 提取音频
+- **一键提取**：点击"提取[格式] ([质量])"按钮
 - **处理过程**：
   1. 读取视频文件
   2. 解码音频流
-  3. 编码为MP3格式
+  3. 选择编码方式
   4. 生成下载链接
 
-### 3. 特殊模式
+### 5. 特殊模式
 - **Safari + MOV**：自动启用录制模式
 - **进度提示**：显示详细处理状态
 - **错误处理**：友好的错误提示
 
-### 4. 下载音频
+### 6. 下载音频
 - **在线试听**：使用内置播放器预览
-- **下载MP3**：点击"下载MP3"保存文件
-- **文件命名**：自动命名为`extracted-audio.mp3`
+- **下载音频**：点击"下载[格式]"保存文件
+- **文件命名**：自动包含质量和格式信息
 
 ## 🎨 设计特点
 
@@ -86,6 +107,7 @@ audio-extract/
 
 ### 用户体验
 - **视觉反馈** - 上传、处理、完成各阶段明确
+- **实时选择** - 格式和质量选择立即生效
 - **进度显示** - 实时显示处理进度和描述
 - **状态提示** - 彩色状态消息提示
 - **一键重置** - 快速清除所有状态
@@ -96,17 +118,35 @@ audio-extract/
 ```javascript
 class DirectAudioExtractor {
     constructor() {
-        // 初始化音频上下文
-        // 检测浏览器类型
-        // 初始化UI元素
+        this.audioFormat = 'mp3';    // mp3, wav, aac
+        this.audioQuality = 'medium'; // low, medium, high
+        // ...
     }
     
+    // 格式和质量选择
+    selectFormat(format)           // 选择输出格式
+    selectQuality(quality)         // 选择音频质量
+    
     // 主要方法
-    async extractAudio()         // 主提取流程
-    async directModeExtraction() // 直接提取模式
-    async recordModeExtraction() // 录制提取模式（Safari备用）
-    async encodeToMP3()         // MP3编码
-    async encodeToWAV()         // WAV编码（预留）
+    async extractAudio()          // 主提取流程
+    async directModeExtraction()  // 直接提取模式
+    async recordModeExtraction()  // 录制提取模式（Safari备用）
+    
+    // 编码方法
+    async encodeToMP3(buffer, bitrate)  // MP3编码
+    async encodeToWAV(buffer)           // WAV编码
+    async encodeToAAC(buffer, bitrate)  // AAC编码
+}
+```
+
+### 音频质量映射
+```javascript
+getBitrate() {
+    switch (this.audioQuality) {
+        case 'low':    return 64;  // 64 kbps
+        case 'medium': return 128; // 128 kbps
+        case 'high':   return 192; // 192 kbps
+    }
 }
 ```
 
@@ -114,41 +154,51 @@ class DirectAudioExtractor {
 1. **文件检测** - 检测文件类型和浏览器
 2. **模式选择** - 根据条件选择直接或录制模式
 3. **音频解码** - 从视频中提取音频数据
-4. **格式编码** - 编码为MP3格式
-5. **结果展示** - 提供播放和下载
+4. **格式编码** - 根据选择编码为指定格式
+5. **质量控制** - 应用选择的比特率
+6. **结果展示** - 提供播放和下载
 
 ## 📱 浏览器兼容性
 
-| 浏览器 | 支持状态 | 备注 |
-|--------|----------|------|
-| Chrome | ✅ 完全支持 | 推荐使用最新版本 |
-| Firefox | ✅ 完全支持 | 推荐使用最新版本 |
-| Safari | ⚠️ 有条件支持 | MOV文件使用录制模式 |
-| Edge | ✅ 完全支持 | Chromium内核版本 |
-| iOS Safari | ⚠️ 有条件支持 | 支持大多数视频格式 |
+| 浏览器 | MP3 | WAV | 备注 |
+|--------|-----|-----|------|
+| Chrome | ✅ | ✅ | 完全支持所有格式 |
+| Firefox | ✅ | ✅ | 完全支持所有格式 |
+| Safari | ✅ | ✅ | MOV文件使用录制模式 |
+| Edge | ✅ | ✅ | Chromium内核版本 |
+| iOS Safari | ✅ | ✅ | 完全支持 |
 
 ### Safari特殊说明
 - **MOV文件**：Safari中MOV文件无法直接解码，使用录制模式
 - **录制模式**：播放视频并录制音频输出
 - **用户确认**：录制前需要用户确认（会发出声音）
+- **格式限制**：录制模式下可能限制格式选择
 
 ## ⚙️ 配置选项
 
-### 音频质量设置
+### MP3编码参数
 ```javascript
-// MP3编码参数
+const bitrate = this.getBitrate(); // 64, 128, 192
 const mp3encoder = new lamejs.Mp3Encoder(
-    2,                    // 声道数（立体声）
-    audioBuffer.sampleRate, // 采样率（保持原始）
-    128                   // 比特率（kbps）
+    2,                    // 立体声
+    audioBuffer.sampleRate, // 保持原始采样率
+    bitrate               // 动态比特率
 );
 ```
 
-### 录制模式配置
+### WAV编码参数
 ```javascript
+// 无损编码，保持原始音频数据
+// 16-bit PCM格式
+// 保持原始采样率和声道数
+```
+
+### AAC编码参数
+```javascript
+const mimeType = 'audio/mp4;codecs=aac';
 const mediaRecorder = new MediaRecorder(destination.stream, {
-    mimeType: 'audio/webm',    // 录制格式
-    audioBitsPerSecond: 128000 // 音频比特率
+    mimeType: mimeType,
+    audioBitsPerSecond: bitrate * 1000
 });
 ```
 
@@ -173,8 +223,18 @@ const mediaRecorder = new MediaRecorder(destination.stream, {
 
 ## 🐛 常见问题
 
-### Q: 处理时间太长？
-**A**: 处理时间与视频长度和大小成正比，长视频需要更长时间。
+### Q: 不同质量设置有什么区别？
+**A**: 
+- **低 (64kbps)**: 文件最小，适合语音、播客（仅MP3）
+- **中 (128kbps)**: 平衡选择，适合日常使用（仅MP3）
+- **高 (192kbps)**: 音质最佳，适合音乐制作（仅MP3）
+- **WAV**: 无损格式，文件大小固定，音质最好
+
+### Q: WAV格式为什么文件很大？
+**A**: WAV是无损格式，不压缩音频数据，因此文件较大但音质最好。文件大小与原始音频相同，不受质量选择影响。
+
+### Q: 处理时间受什么影响？
+**A**: 视频长度、文件大小、选择的格式都会影响处理时间。WAV最快，MP3取决于视频长度和选择的质量。
 
 ### Q: 文件大小有限制吗？
 **A**: 建议单个视频文件不超过500MB，过大的文件可能导致内存不足。
@@ -182,15 +242,20 @@ const mediaRecorder = new MediaRecorder(destination.stream, {
 ### Q: 支持的视频格式？
 **A**: 支持大多数现代视频格式：MP4、MOV、AVI、MKV、WebM等。
 
-### Q: 提取的音频质量如何？
-**A**: 保持原始音频质量，MP3编码使用128kbps比特率。
-
 ### Q: Safari中为什么需要确认？
 **A**: Safari的MOV文件需要使用录制模式，会播放视频声音，需要用户确认。
 
 ## 📝 更新日志
 
-### v1.0.0 (当前版本)
+### v2.0.0 (当前版本)
+- ✅ **多格式支持** - 新增WAV格式输出
+- ✅ **质量选择器** - MP3支持高/中/低三档比特率
+- ✅ **WAV编码** - 支持无损WAV格式
+- ✅ **动态UI** - 选择WAV时自动禁用质量选择器
+- ✅ **智能提示** - WAV格式下显示质量选择无效提示
+- ✅ **文件命名** - MP3包含质量信息，WAV保持简洁
+
+### v1.0.0
 - ✅ 基础视频上传功能
 - ✅ 音频提取和MP3编码
 - ✅ Safari特殊处理
@@ -202,14 +267,34 @@ const mediaRecorder = new MediaRecorder(destination.stream, {
 
 ## 🔮 未来计划
 
-- [ ] 支持更多音频格式（WAV、AAC、OGG）
-- [ ] 音频质量选择（高/中/低比特率）
 - [ ] 批量处理多个视频文件
 - [ ] 音频剪辑功能（选择时间段）
 - [ ] 音频效果（音量调整、淡入淡出）
 - [ ] 音频可视化波形显示
 - [ ] PWA离线支持
 - [ ] 云存储集成
+- [ ] 更多音频格式（OGG、FLAC）
+- [ ] 音频合并和分割
+
+## 🎨 PC端特色功能
+
+### 大屏幕优化
+- **响应式布局** - 768px+ 和 1024px+ 两档优化
+- **滚动支持** - 支持页面滚动，不再限制视口高度
+- **悬停效果** - 按钮和卡片的悬停动画
+- **视觉增强** - 更大的字体和间距，更清晰的视觉层次
+
+### 性能优化
+- **文件限制** - PC端支持2GB，手机端80MB
+- **大文件警告** - 超过200MB显示处理时间预估
+- **内存管理** - 及时清理音频上下文和临时资源
+- **进度优化** - 更准确的进度显示和预计时间
+
+### 交互增强
+- **拖放优化** - 更大的拖放区域，清晰的视觉反馈
+- **状态提示** - 详细的操作状态和错误信息
+- **一键重置** - 快速清除所有状态和资源
+- **文件信息** - 显示文件格式、大小等详细信息
 
 ## 📄 许可证
 
