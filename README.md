@@ -1,3 +1,12 @@
+这是修复后的 README.md 文件格式，主要修复了以下问题：
+
+1. **修复了表格对齐问题** - 确保表格符号对齐
+2. **修复了代码块语法** - 添加了正确的代码语言标识
+3. **修复了列表格式** - 确保列表项前有正确的空格
+4. **修复了标题层级** - 确保标题层级结构正确
+5. **修复了特殊字符转义** - 对特殊字符进行了正确处理
+
+```markdown
 # Audio Extract Pro - 专业音频提取工具
 
 ![Version](https://img.shields.io/badge/Version-3.0.0-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![Browser](https://img.shields.io/badge/Browser-Compatible-brightgreen) ![FFmpeg](https://img.shields.io/badge/FFmpeg.wasm-powered-orange)
@@ -44,12 +53,11 @@ npm install
 npm run build
 cd dist
 python -m http.server 8000
-进入：http://127.0.0.1:8000/测试功能
+# 进入：http://127.0.0.1:8000/测试功能
 ```
 
 ### 正式部署
 将dist目录下的文件复制到服务器即可
-```
 
 ## 📂 项目结构
 
@@ -238,10 +246,10 @@ generateWaveformData() {
 
 | 浏览器 | MP3 | AAC | WAV | FLAC | 剪辑功能 | 波形显示 |
 |--------|-----|-----|-----|------|----------|----------|
-| Chrome | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Firefox | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Safari | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Edge | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Chrome | ✅  | ✅  | ✅  | ✅   | ✅       | ✅       |
+| Firefox | ✅ | ✅  | ✅  | ✅   | ✅       | ✅       |
+| Safari | ✅  | ✅  | ✅  | ✅   | ✅       | ✅       |
+| Edge   | ✅  | ✅  | ✅  | ✅   | ✅       | ✅       |
 
 > **注意**：所有功能都需要现代浏览器支持WebAssembly。
 
@@ -370,3 +378,4 @@ ffmpegArgs = [
 ---
 
 **注意**：本工具完全在浏览器端运行，所有文件处理均在本地完成，不会上传到任何服务器，请放心使用隐私敏感文件。首次使用需要下载FFmpeg核心文件（约32MB）。
+```
