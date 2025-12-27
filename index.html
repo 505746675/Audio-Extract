@@ -4,21 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="专业的音频提取工具，支持多种格式，快速转换视频为音频">
-    <title>Audio Extract</title>
+    <title>Audio Extract Pro</title>
     <link rel="stylesheet" href="style.css">
-    <!-- LameJS库用于MP3编码 -->
-    <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.0/lame.min.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Audio Extract</h1>
+            <h1>Audio Extract Pro</h1>
             <p>专业的视频转音频工具，支持多种格式</p>
         </div>
-
-        <!-- Safari模式提示 -->
-        <div class="mode-badge" id="safariBadge" style="display: none;">Safari模式已激活</div>
-        <div class="mode-badge" id="recordingBadge" style="display: none; background: #fff3e0; color: #f57c00;">强制录制模式 (Safari MOV)</div>
 
         <div class="card">
             <div class="file-input-wrapper" id="fileWrapper">
@@ -40,32 +34,78 @@
 
             <div class="status-message" id="statusMessage"></div>
 
-            <!-- 输出格式选择器 -->
+            <!-- 输出格式选择器 - 弹窗版本 -->
             <div class="format-selector" id="formatSelector">
-                <label for="formatSelect" class="format-label">输出格式</label>
-                <select id="formatSelect" class="format-select">
-                    <option value="mp3" selected>MP3</option>
-                    <option value="aac">AAC</option>
-                    <option value="flac">FLAC</option>
-                    <option value="wav">WAV</option>
-                </select>
+                <div class="selector-header">
+                    <label class="format-label">输出格式</label>
+                    <span class="format-hint" id="formatHint">兼容性最好</span>
+                </div>
+                <button id="formatSelectBtn" class="format-select-btn">
+                    <span id="formatDisplay">MP3</span>
+                </button>
             </div>
 
-            <!-- 音频质量选择器 -->
+            <!-- 音频质量选择器 - 弹窗版本 -->
             <div class="quality-selector">
-                <label for="qualitySelect" class="quality-label">音频质量</label>
-                <select id="qualitySelect" class="quality-select">
-                    <option value="ultra-low">超高质量 (320kbps)</option>
-                    <option value="high">高质量 (192kbps)</option>
-                    <option value="medium" selected>中质量 (128kbps)</option>
-                    <option value="low">低质量 (64kbps)</option>
-                </select>
+                <div class="selector-header">
+                    <label class="quality-label">音频质量</label>
+                    <span class="quality-hint" id="qualityHint">适合大多数用途</span>
+                </div>
+                <button id="qualitySelectBtn" class="quality-select-btn">
+                    <span id="qualityDisplay">中质量 (128kbps)</span>
+                </button>
             </div>
 
-            <button class="btn btn-primary" id="extractBtn" disabled>
-                <div class="spinner"></div>
-                <span>提取音频</span>
-            </button>
+            <!-- 时间段选择器 -->
+            <div class="clip-selector" id="clipSelector" style="display: none;">
+                <label class="clip-label">剪辑时间段</label>
+                <div class="time-inputs">
+                    <div class="time-input-group">
+                        <span class="time-label">开始时间</span>
+                        <input type="text" id="startTime" class="time-input" placeholder="00:00:00" value="00:00:00">
+                    </div>
+                    <div class="time-input-group">
+                        <span class="time-label">结束时间</span>
+                        <input type="text" id="endTime" class="time-input" placeholder="00:00:00" value="00:00:00">
+                    </div>
+                </div>
+                <div class="time-hint">格式: 时:分:秒 (例如: 00:01:30)</div>
+            </div>
+
+            <!-- 波形可视化容器 -->
+            <div class="waveform-container" id="waveformContainer" style="display: none;">
+                <label class="waveform-label">音频波形</label>
+                
+                <!-- 音频加载进度条 -->
+                <div class="audio-loading-progress" id="audioLoadingProgress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="audioProgressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="audioProgressDescription">加载音频中...</span>
+                        <span class="progress-percentage" id="audioProgressPercentage">0%</span>
+                    </div>
+                </div>
+                
+                <canvas id="waveformCanvas" class="waveform-canvas"></canvas>
+                <div class="waveform-controls">
+                    <button class="btn btn-secondary" id="playSelectionBtn" style="display: none;">播放选中段</button>
+                    <button class="btn btn-secondary" id="resetSelectionBtn" style="display: none;">重置选择</button>
+                </div>
+            </div>
+
+            <!-- FFmpeg模式指示器 -->
+            <div class="mode-indicator" id="modeIndicator" style="display: none;">
+                <span id="modeText">FFmpeg模式</span>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="extractBtn" disabled>
+                    <div class="spinner"></div>
+                    <span>提取音频</span>
+                </button>
+                <a href="#" class="btn download-btn disabled" id="downloadBtn" download="extracted-audio.mp3">下载音频</a>
+            </div>
 
             <div class="progress-container" id="progressContainer">
                 <div class="progress-bar">
@@ -81,18 +121,73 @@
                 <div class="audio-player">
                     <audio id="audioPlayer" controls></audio>
                 </div>
-                <a href="#" class="download-btn" id="downloadBtn" download="extracted-audio.mp3">下载音频</a>
+                <button id="resetBtn" class="btn btn-secondary">重置</button>
             </div>
 
-            <p class="info-text">支持 MP3, AAC, WAV, FLAC 格式，处理时长与视频大小成正比</p>
+            <p class="info-text">全局采用FFmpeg处理，支持 MP3, AAC, WAV, FLAC 格式。</p>
         </div>
-
-        <button class="btn btn-secondary" id="resetBtn" style="display: none;">重置</button>
     </div>
 
-    <video id="hiddenVideo" playsinline style="display: none;"></video>
-    <audio id="hiddenAudio" style="display: none;"></audio>
+    <!-- 输出格式弹窗 -->
+    <div class="modal-overlay" id="formatModal">
+        <div class="modal">
+            <div class="modal-header">选择输出格式</div>
+            <div class="modal-body">
+                <div class="modal-list" id="formatModalList">
+                    <div class="modal-item" data-format="mp3" data-hint="兼容性最好">
+                        <span>MP3</span>
+                        <small>兼容性最好</small>
+                    </div>
+                    <div class="modal-item" data-format="aac" data-hint="高质量">
+                        <span>AAC</span>
+                        <small>高质量</small>
+                    </div>
+                    <div class="modal-item" data-format="flac" data-hint="无损压缩">
+                        <span>FLAC</span>
+                        <small>无损压缩</small>
+                    </div>
+                    <div class="modal-item" data-format="wav" data-hint="无损质量">
+                        <span>WAV</span>
+                        <small>无损质量</small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="cancelFormatBtn">取消</button>
+            </div>
+        </div>
+    </div>
 
-    <script src="script.js"></script>
+    <!-- 音频质量弹窗 -->
+    <div class="modal-overlay" id="qualityModal">
+        <div class="modal">
+            <div class="modal-header">选择音频质量</div>
+            <div class="modal-body">
+                <div class="modal-list" id="qualityModalList">
+                    <div class="modal-item" data-quality="ultra-low" data-hint="320kbps">
+                        <span>超高质量</span>
+                        <small>320kbps</small>
+                    </div>
+                    <div class="modal-item" data-quality="high" data-hint="192kbps">
+                        <span>高质量</span>
+                        <small>192kbps</small>
+                    </div>
+                    <div class="modal-item" data-quality="medium" data-hint="128kbps">
+                        <span>中质量</span>
+                        <small>128kbps</small>
+                    </div>
+                    <div class="modal-item" data-quality="low" data-hint="64kbps">
+                        <span>低质量</span>
+                        <small>64kbps</small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="cancelQualityBtn">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./script.js"></script>
 </body>
 </html>

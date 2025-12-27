@@ -62,18 +62,6 @@ body {
 }
 
 
-.mode-badge {
-    background: #e8f5e9;
-    color: #2e7d32;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    text-align: center;
-    font-weight: 600;
-    margin-bottom: 10px;
-    align-self: center;
-    display: none;
-}
 
 .card {
     background: var(--card-bg);
@@ -425,28 +413,129 @@ body {
     height: 30px;
 }
 
-.download-btn {
+.button-group {
+    display: flex;
+    gap: 8px;
     width: 100%;
-    padding: 12px;
-    background: var(--success);
-    color: white;
+}
+
+/* 动作按钮容器 */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+/* 提取按钮和下载按钮统一样式 */
+#extractBtn,
+.download-btn {
+    flex: 1;
+    padding: 16px;
     border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
     text-decoration: none;
     text-align: center;
-    font-weight: 600;
-    font-size: 15px;
-    transition: all 0.2s ease;
-    display: inline-block;
 }
 
-.download-btn:hover {
+/* 提取按钮样式 */
+#extractBtn {
+    background: var(--primary);
+    color: white;
+}
+
+#extractBtn:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 5px 15px rgba(52, 199, 89, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 122, 255, 0.3);
 }
 
-.download-btn:active {
+#extractBtn:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+#extractBtn:disabled {
+    background: #e0e0e0;
+    color: #999;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* 下载按钮样式 - 修复优先级问题 */
+.download-btn {
+    background: #e0e0e0;
+    color: #999;
+    cursor: not-allowed;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+}
+
+/* 激活状态 - 使用更高优先级的选择器 */
+.download-btn:not(.disabled) {
+    background: var(--primary) !important;
+    color: white !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+    text-decoration: none !important;
+    text-align: center !important;
+}
+
+.download-btn:not(.disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(0, 122, 255, 0.3);
+}
+
+.download-btn:not(.disabled):active {
     transform: scale(0.98);
     opacity: 0.8;
+}
+
+/* 确保下载按钮在激活状态下与提取按钮完全一致 */
+.download-btn:not(.disabled) {
+    background: var(--primary) !important;
+    color: white !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+    text-decoration: none !important;
+    text-align: center !important;
+}
+
+/* 重置按钮样式 */
+#resetBtn {
+    width: 100%;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#resetBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#resetBtn:active {
+    transform: scale(0.98);
+}
+
+/* 按钮组样式（保持兼容性） */
+.button-group {
+    display: flex;
+    gap: 8px;
+    width: 100%;
 }
 
 .info-text {
@@ -490,8 +579,562 @@ body {
     color: #ff9500;
 }
 
+/* FFmpeg模式指示器 */
+.mode-indicator {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    margin: 12px 0;
+    animation: pulse 2s infinite;
+    display: none;
+}
+
+.mode-indicator.show {
+    display: block;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.9; }
+    50% { opacity: 1; }
+    100% { opacity: 0.9; }
+}
+
+/* FFmpeg加载状态 */
+.ffmpeg-loading {
+    background: #f57c00;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 10px 0;
+    text-align: center;
+    font-weight: 600;
+}
+
 #hiddenVideo, #hiddenAudio {
     display: none;
+}
+
+/* 剪辑选择器样式 */
+.clip-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.clip-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.time-inputs {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+}
+
+.time-input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.time-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.time-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.time-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(0, 122, 255, 0.05);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+
+.time-input.error {
+    border-color: var(--danger);
+    background: rgba(255, 59, 48, 0.05);
+}
+
+.time-hint {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-align: center;
+    font-style: italic;
+    margin-top: -4px;
+}
+
+/* 波形可视化容器 */
+.waveform-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.waveform-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+/* 音频加载进度条 */
+.audio-loading-progress {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(0, 122, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 122, 255, 0.2);
+}
+
+.audio-loading-progress.show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.audio-loading-progress .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.audio-loading-progress .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), #00a8ff);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+.audio-loading-progress .progress-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: center;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.audio-loading-progress .progress-percentage {
+    font-size: 13px;
+    color: var(--primary);
+    font-weight: 700;
+    min-width: 40px;
+    text-align: right;
+}
+
+/* 波形画布加载状态 */
+.waveform-canvas.loading {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: blur(2px);
+}
+
+.waveform-canvas.loaded {
+    opacity: 1;
+    animation: fadeIn 0.5s ease;
+}
+
+.waveform-canvas {
+    width: 100%;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    cursor: crosshair;
+    transition: all 0.2s ease;
+}
+
+.waveform-canvas:hover {
+    background: rgba(0, 122, 255, 0.03);
+    border-color: var(--primary);
+}
+
+.waveform-canvas:active {
+    cursor: ew-resize;
+}
+
+/* 波形控制按钮组 */
+.waveform-controls {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.waveform-controls .btn {
+    flex: 1;
+    padding: 10px;
+    font-size: 13px;
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.waveform-controls .btn:hover {
+    background: rgba(0, 122, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.waveform-controls .btn:active {
+    transform: translateY(0);
+}
+
+/* 时间输入组增强 */
+.time-input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+}
+
+.time-input-group::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 8px;
+    background: transparent;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.time-input-group:focus-within::before {
+    background: rgba(0, 122, 255, 0.05);
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+}
+
+/* 状态指示器增强 */
+.selection-indicator {
+    font-size: 12px;
+    color: var(--primary);
+    text-align: center;
+    font-weight: 600;
+    padding: 8px;
+    background: rgba(0, 122, 255, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 122, 255, 0.3);
+    display: none;
+    transition: all 0.2s ease;
+}
+
+.selection-indicator.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.selection-indicator:hover {
+    background: rgba(0, 122, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+/* 移动端优化 - 波形功能 */
+@media (max-width: 768px) {
+    .waveform-canvas {
+        height: 80px; /* 增加高度，便于触摸 */
+        touch-action: none; /* 防止页面滚动 */
+        user-select: none; /* 防止文本选择 */
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+    }
+    
+    .waveform-controls {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .waveform-controls .btn {
+        padding: 12px;
+        font-size: 14px;
+        min-height: 44px; /* iOS最小触摸区域 */
+    }
+    
+    /* 触摸反馈增强 */
+    .waveform-canvas:active {
+        opacity: 0.9;
+    }
+    
+    /* 移动端边界手柄增大 */
+    .waveform-canvas {
+        /* 通过JS动态调整，这里保留基础样式 */
+    }
+}
+
+/* 移动端触摸优化 - 全局 */
+@media (hover: none) and (pointer: coarse) {
+    /* 增加所有可触摸元素的最小触摸区域 */
+    .btn,
+    .format-select-btn,
+    .quality-select-btn,
+    .modal-item,
+    .time-input,
+    .waveform-controls .btn {
+        min-height: 44px;
+    }
+    
+    /* 移动端触摸反馈 */
+    .waveform-canvas {
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* 防止触摸时的蓝色高亮 */
+    .waveform-canvas,
+    .btn,
+    .format-select-btn,
+    .quality-select-btn {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* 触摸状态指示器 - 移动端专用 */
+.touch-feedback {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 122, 255, 0.3);
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.touch-feedback.active {
+    opacity: 1;
+    transform: scale(1);
+    animation: touchPulse 0.6s ease-out;
+}
+
+@keyframes touchPulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* 移动端波形拖动优化 */
+@media (max-width: 768px) {
+    /* 增大边界检测阈值，便于触摸 */
+    .waveform-canvas {
+        /* JS会使用更大的阈值 */
+    }
+    
+    /* 触摸时的视觉反馈 */
+    .waveform-canvas.dragging {
+        background: rgba(0, 122, 255, 0.08);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15);
+    }
+    
+    /* 移动端按钮组垂直排列 */
+    .action-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .action-buttons #extractBtn,
+    .action-buttons .download-btn {
+        width: 100%;
+        flex: none;
+        padding: 16px;
+        font-size: 16px;
+    }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+    .waveform-canvas {
+        border-width: 2px;
+    }
+    
+    .time-input {
+        border-width: 2px;
+    }
+}
+
+/* 减少动画模式支持 */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .waveform-canvas {
+        transition: none;
+    }
+}
+
+/* 深色模式支持（如果需要） */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #1c1c1e;
+        --card-bg: rgba(28, 28, 30, 0.8);
+        --text-primary: #ffffff;
+        --text-secondary: #8e8e93;
+        --border-color: #38383a;
+    }
+    
+    .waveform-canvas {
+        background: rgba(255, 255, 255, 0.05);
+    }
+}
+
+/* 高分辨率屏幕优化 - 波形功能 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .waveform-canvas {
+        border-width: 0.5px;
+    }
+}
+
+/* 悬停提示 */
+.waveform-hint {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 4px;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+/* 边界拖拽时的视觉反馈 */
+.waveform-canvas.dragging {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+}
+
+/* 时间输入错误时的增强提示 */
+.time-input.error {
+    border-color: var(--danger);
+    background: rgba(255, 59, 48, 0.05);
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+}
+
+/* 播放状态指示器 */
+.playing-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    margin-left: 6px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.waveform-controls {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.waveform-controls .btn {
+    flex: 1;
+    padding: 10px;
+    font-size: 13px;
+}
+
+/* 选择状态指示器 */
+.selection-indicator {
+    font-size: 12px;
+    color: var(--primary);
+    text-align: center;
+    font-weight: 600;
+    padding: 6px;
+    background: rgba(0, 122, 255, 0.1);
+    border-radius: 6px;
+    display: none;
+}
+
+.selection-indicator.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* 时间选择错误提示 */
+.time-error {
+    font-size: 11px;
+    color: var(--danger);
+    text-align: center;
+    margin-top: -4px;
+    display: none;
+}
+
+.time-error.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* 移动端优化 - 剪辑功能 */
+@media (max-width: 768px) {
+    .time-inputs {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .waveform-canvas {
+        height: 60px;
+    }
+    
+    .waveform-controls {
+        flex-direction: column;
+    }
+}
+
+/* 高分辨率屏幕优化 - 剪辑功能 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .time-input {
+        border-width: 0.5px;
+    }
+    
+    .waveform-canvas {
+        border-width: 0.5px;
+    }
 }
 
 /* 确认弹窗动画 */
@@ -729,6 +1372,261 @@ body {
 }
 
 
+/* 弹窗样式 - 参考Transly设计 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal {
+    background: var(--card-bg);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 24px;
+    width: 90%;
+    max-width: 380px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.modal-overlay.show .modal {
+    transform: scale(1);
+}
+
+.modal-header {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+    text-align: center;
+    letter-spacing: -0.5px;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px;
+}
+
+.modal-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.modal-list::-webkit-scrollbar-thumb {
+    background: var(--text-tertiary);
+    border-radius: 2px;
+}
+
+.modal-item {
+    padding: 14px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid transparent;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.modal-item:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateX(4px);
+    border-color: var(--primary);
+}
+
+.modal-item:active {
+    transform: scale(0.98);
+}
+
+.modal-item.selected {
+    background: rgba(0, 122, 255, 0.12);
+    border-color: var(--primary);
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.modal-item.selected::after {
+    content: '✓';
+    font-weight: 700;
+    color: var(--primary);
+    margin-left: 8px;
+}
+
+.modal-item:hover.selected::after {
+    color: white;
+}
+
+.modal-item small {
+    font-size: 12px;
+    opacity: 0.7;
+    font-weight: 500;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 8px;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.modal-btn-primary:active {
+    transform: scale(0.98);
+    background: var(--success);
+}
+
+.modal-btn-secondary {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.modal-btn-secondary:active {
+    transform: scale(0.98);
+    background: var(--border-color);
+}
+
+/* 选择器容器样式调整 - 带标题和提示在旁边 */
+.format-selector,
+.quality-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* 标题头部 - 包含标签和提示文字 */
+.selector-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.format-label,
+.quality-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.format-hint,
+.quality-hint {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-align: right;
+}
+
+/* 新的选择器按钮样式 - 参考Transly语言选择按钮 */
+.format-select-btn,
+.quality-select-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.format-select-btn::after,
+.quality-select-btn::after {
+    content: '›';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--text-tertiary);
+    font-weight: 300;
+    transition: all 0.2s ease;
+}
+
+.format-select-btn:hover,
+.quality-select-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    transform: translateX(2px);
+}
+
+.format-select-btn:hover::after,
+.quality-select-btn:hover::after {
+    color: white;
+    right: 14px;
+}
+
+.format-select-btn:active,
+.quality-select-btn:active {
+    transform: scale(0.98);
+}
+
+/* 按钮内显示的当前选择文本 */
+.format-select-btn span,
+.quality-select-btn span {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* 悬停时按钮内文本颜色 */
+.format-select-btn:hover span,
+.quality-select-btn:hover span {
+    color: white;
+}
+
 /* 移动端优化 */
 @media (max-width: 380px) {
     .header h1 {
@@ -748,5 +1646,63 @@ body {
     .quality-btn {
         padding: 8px 4px;
         font-size: 12px;
+    }
+    .button-group {
+        flex-direction: column;
+        gap: 6px;
+    }
+    .download-btn,
+    #resetBtn {
+        padding: 14px;
+        font-size: 14px;
+    }
+    /* 动作按钮在移动端垂直排列 - 统一大小 */
+    .action-buttons {
+        flex-direction: column;
+        gap: 6px;
+    }
+    .action-buttons #extractBtn,
+    .action-buttons .download-btn {
+        padding: 14px;
+        font-size: 14px;
+        width: 100%;
+        flex: none;
+    }
+    
+    /* 弹窗移动端优化 */
+    .modal {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .modal-header {
+        font-size: 16px;
+        margin-bottom: 14px;
+    }
+    
+    .modal-item {
+        padding: 12px 14px;
+        border-radius: 10px;
+    }
+    
+    .modal-item small {
+        font-size: 11px;
+    }
+    
+    .modal-btn {
+        padding: 10px;
+        font-size: 13px;
+    }
+    
+    .format-select-btn,
+    .quality-select-btn {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+    
+    .format-select-btn::after,
+    .quality-select-btn::after {
+        right: 14px;
+        font-size: 18px;
     }
 }

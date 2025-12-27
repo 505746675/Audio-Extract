@@ -1,0 +1,37 @@
+{
+  "name": "audio-extract-pro",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "基于FFmpeg.wasm的专业视频转音频提取工具 Pro",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "download:ffmpeg": "node download-ffmpeg-core.js",
+    "postinstall": "npm run download:ffmpeg"
+  },
+  "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2"
+  },
+  "devDependencies": {
+    "vite": "^5.4.21"
+  },
+  "keywords": [
+    "ffmpeg",
+    "audio",
+    "extract",
+    "wasm",
+    "video-to-audio"
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": ""
+}
