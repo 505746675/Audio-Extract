@@ -1,12 +1,3 @@
-这是修复后的 README.md 文件格式，主要修复了以下问题：
-
-1. **修复了表格对齐问题** - 确保表格符号对齐
-2. **修复了代码块语法** - 添加了正确的代码语言标识
-3. **修复了列表格式** - 确保列表项前有正确的空格
-4. **修复了标题层级** - 确保标题层级结构正确
-5. **修复了特殊字符转义** - 对特殊字符进行了正确处理
-
-```markdown
 # Audio Extract Pro - 专业音频提取工具
 
 ![Version](https://img.shields.io/badge/Version-3.0.0-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![Browser](https://img.shields.io/badge/Browser-Compatible-brightgreen) ![FFmpeg](https://img.shields.io/badge/FFmpeg.wasm-powered-orange)
