@@ -40,15 +40,21 @@
 npm install
 ```
 
-### 构建版本
+### 启动开发服务器
+```bash
+npm run dev
+开发服务器启动后，在浏览器中访问：http://localhost:3000
+```
+
+### 生产构建
 ```bash
 npm run build
 cd dist
 python -m http.server 8000
-# 进入：http://127.0.0.1:8000/测试功能
+预览生产版本：http://localhost:8000
 ```
 
-### 正式部署
+### 部署到服务器
 将dist目录下的文件复制到服务器即可
 
 ## 📂 项目结构
